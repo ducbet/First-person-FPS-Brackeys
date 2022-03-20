@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMotor))]
-public class PlayerController : MonoBehaviour
+public class PlayerControllerFixed : MonoBehaviour
 {
     [SerializeField]
     private float speed = 5f;
@@ -13,7 +13,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerMotor = GetComponent<PlayerMotor>();    
+        playerMotor = GetComponent<PlayerMotor>();
+        // disable Capsule Collider and Character Controller
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<CharacterController>().enabled = false;
     }
 
     // Update is called once per frame
