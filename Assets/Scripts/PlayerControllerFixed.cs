@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerControllerFixed : MonoBehaviour
 {
@@ -7,14 +8,26 @@ public class PlayerControllerFixed : MonoBehaviour
     private float speed = 5f;
     [SerializeField]
     private float lookSensitivity = 3f;
+    [SerializeField]
+    private float thrusterForce = 1000f;
+
+    [Header("Spring setting:")]
+    [SerializeField]
+    private float jointSpring = 10f;
+    [SerializeField]
+    private float jointMaxForce = 40f;
 
     private PlayerMotor playerMotor;
+    private ConfigurableJoint joint;
 
     // Start is called before the first frame update
     void Start()
     {
         playerMotor = GetComponent<PlayerMotor>();
-        // disable Capsule Collider and Character Controller
+        joint = GetComponent<ConfigurableJoint>();
+        SetJointSettings(jointSpring);
+
+        // disable Capsule Collider and Character Controller (avoid bug)
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<CharacterController>().enabled = false;
     }
@@ -36,7 +49,29 @@ public class PlayerControllerFixed : MonoBehaviour
         playerMotor.Rotate(_rotation);
 
         float _xRot = Input.GetAxisRaw("Mouse Y");
-        Vector3 _cameraRotation = new Vector3(_xRot, 0f, 0f) * lookSensitivity;
-        playerMotor.RotateCamera(_cameraRotation);
+        float _cameraRotationX = _xRot * lookSensitivity;
+        playerMotor.RotateCamera(_cameraRotationX);
+
+        Vector3 _thrusterForce = Vector3.zero;
+        if(Input.GetButton("Jump"))
+        {
+            _thrusterForce = Vector3.up * thrusterForce;
+            SetJointSettings(0f);
+        }
+        else
+        {
+            // optimize: this case is called a lot
+            SetJointSettings(jointSpring);
+        }
+        playerMotor.ApplyThruster(_thrusterForce);
+    }
+
+    private void SetJointSettings(float _jointSpring)
+    {
+        joint.yDrive = new JointDrive
+        {
+            positionSpring = _jointSpring,
+            maximumForce = jointMaxForce
+        };
     }
 }
