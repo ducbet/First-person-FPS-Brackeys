@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -5,6 +6,11 @@ public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField]
     Behaviour[] componentsToDisable;
+
+    [SerializeField]
+    private string remotePlayerName = "RemotePlayer";
+
+    private string playerNamePrefix = "Player ";
 
     Camera sceneCamera;
 
@@ -23,11 +29,28 @@ public class PlayerSetup : NetworkBehaviour
         else
         {
             // on network
-            for (int i = 0; i < componentsToDisable.Length; i++)
-            {
-                componentsToDisable[i].enabled = false;
-            }
+            DisableComponents();
+            AssignRemotePlayer();
         }
+        SetPlayerName();
+    }
+
+    private void SetPlayerName()
+    {
+        this.name = playerNamePrefix + GetComponent<NetworkIdentity>().netId;
+    }
+
+    private void DisableComponents()
+    {
+        for (int i = 0; i < componentsToDisable.Length; i++)
+        {
+            componentsToDisable[i].enabled = false;
+        }
+    }
+
+    private void AssignRemotePlayer()
+    {
+        gameObject.layer = LayerMask.NameToLayer(remotePlayerName);
     }
 
     private void OnDestroy()

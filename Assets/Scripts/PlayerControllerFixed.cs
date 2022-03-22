@@ -28,8 +28,15 @@ public class PlayerControllerFixed : MonoBehaviour
         SetJointSettings(jointSpring);
 
         // disable Capsule Collider and Character Controller (avoid bug)
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<CharacterController>().enabled = false;
+        CapsuleCollider _capsuleCollider = GetComponent<CapsuleCollider>();
+        if (_capsuleCollider) {
+            _capsuleCollider.enabled = false;
+        }
+        CharacterController _characterController = GetComponent<CharacterController>();
+        if (_characterController)
+        {
+            _characterController.enabled = false;
+        }
     }
 
     // Update is called once per frame
