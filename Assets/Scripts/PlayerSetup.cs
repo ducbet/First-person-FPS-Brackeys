@@ -2,6 +2,7 @@ using System;
 using Mirror;
 using UnityEngine;
 
+[RequireComponent(typeof(Player))]
 public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField]
@@ -9,8 +10,6 @@ public class PlayerSetup : NetworkBehaviour
 
     [SerializeField]
     private string remotePlayerName = "RemotePlayer";
-
-    private string playerNamePrefix = "Player ";
 
     Camera sceneCamera;
 
@@ -32,12 +31,12 @@ public class PlayerSetup : NetworkBehaviour
             DisableComponents();
             AssignRemotePlayer();
         }
-        SetPlayerName();
     }
 
-    private void SetPlayerName()
+    public override void OnStartClient()
     {
-        this.name = playerNamePrefix + GetComponent<NetworkIdentity>().netId;
+        base.OnStartClient();
+        GameManager.RegisterPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<Player>());
     }
 
     private void DisableComponents()
@@ -59,5 +58,6 @@ public class PlayerSetup : NetworkBehaviour
         {
             sceneCamera.gameObject.SetActive(true);
         }
+        GameManager.DeregisterPlayer(this.name);
     }
 }
