@@ -3,6 +3,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager singleton;
+
+    public MatchSettings matchSettings;
+
+    private void Awake()
+    {
+        if (singleton)
+        {
+            Debug.LogWarning("Game magager is existing!");
+        }
+        else
+        {
+            singleton = this; 
+        }
+    }
+
+    #region Player tracking
     private const string PLAYER_ID_PREFIX = "Player ";
 
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
@@ -23,4 +40,5 @@ public class GameManager : MonoBehaviour
     {
         return players[_playerId];
     }
+    #endregion
 }

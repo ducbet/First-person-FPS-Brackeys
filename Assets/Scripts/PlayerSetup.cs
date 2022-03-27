@@ -31,6 +31,7 @@ public class PlayerSetup : NetworkBehaviour
             DisableComponents();
             AssignRemotePlayer();
         }
+        GetComponent<Player>().Setup();
     }
 
     public override void OnStartClient()

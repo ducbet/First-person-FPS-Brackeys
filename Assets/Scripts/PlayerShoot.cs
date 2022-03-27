@@ -48,6 +48,6 @@ public class PlayerShoot : NetworkBehaviour
     {
         Debug.Log(_playerId + " has been shot");
         Player player = GameManager.GetPlayer(_playerId);
-        player.TakeDamage(_damage);
+        player.RpcTakeDamage(_damage);
     }
 }
