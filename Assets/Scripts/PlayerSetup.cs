@@ -48,7 +48,7 @@ public class PlayerSetup : NetworkBehaviour
         }
     }
 
-    private void AssignRemotePlayer()
+    private void AssignRemotePlayer()   
     {
         gameObject.layer = LayerMask.NameToLayer(remotePlayerName);
     }
