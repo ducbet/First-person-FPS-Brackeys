@@ -390,6 +390,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10378959c0cd06846b2f7a10cbc4bd0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchSettings:
+    respawnTime: 3
 --- !u!4 &763240960
 Transform:
   m_ObjectHideFlags: 0
@@ -798,7 +800,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 8439103195758653227, guid: 139cfba71ac2ca7439e6d5e11d25e36c, type: 3}
+  playerPrefab: {fileID: 6564305369898701334, guid: 139cfba71ac2ca7439e6d5e11d25e36c, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs: []

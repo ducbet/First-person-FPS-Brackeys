@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerControllerFixed : MonoBehaviour
@@ -19,12 +20,14 @@ public class PlayerControllerFixed : MonoBehaviour
 
     private PlayerMotor playerMotor;
     private ConfigurableJoint joint;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         playerMotor = GetComponent<PlayerMotor>();
         joint = GetComponent<ConfigurableJoint>();
+        animator = GetComponent<Animator>();
         SetJointSettings(jointSpring);
 
         // disable Capsule Collider and Character Controller (avoid bug)
@@ -42,13 +45,18 @@ public class PlayerControllerFixed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float _zMove = Input.GetAxisRaw("Horizontal");
-        float _xMove = Input.GetAxisRaw("Vertical");
+        float _xMove = Input.GetAxis("Horizontal");
+        float _zMove = Input.GetAxis("Vertical");
 
-        Vector3 _movHorizontal = transform.right * _zMove;
-        Vector3 _movVerical = transform.forward * _xMove;
+        Vector3 _movHorizontal = transform.right * _xMove;
+        Vector3 _movVerical = transform.forward * _zMove;
 
-        Vector3 _velocity = (_movHorizontal + _movVerical).normalized * speed;
+        // Final moverment vector
+        Vector3 _velocity = (_movHorizontal + _movVerical) * speed;
+        // Animate movement
+        Debug.Log("_zMove" + _zMove.ToString());
+        animator.SetFloat("ForwardVelocity", _zMove);
+        // Apply movement
         playerMotor.Move(_velocity);
 
         float _yRot = Input.GetAxisRaw("Mouse X");
